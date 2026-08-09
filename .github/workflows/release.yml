@@ -1,0 +1,32 @@
+name: 构建 Chrome 扩展
+
+on:
+  push:
+    branches: ['**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - run: bun install --frozen-lockfile
+      - run: bun run test
+      - run: bun run build
+      - run: cd dist && zip -r ../wikidot-editor-better-chrome.zip .
+      - name: 获取版本
+        id: version
+        run: echo "value=$(bun -e \"console.log(require('./package.json').version)\")" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wikidot-editor-better-chrome-extension
+          path: wikidot-editor-better-chrome.zip
+      - name: 创建 Release
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "v${{ steps.version.outputs.value }}" wikidot-editor-better-chrome.zip --target "$GITHUB_SHA" --title "v${{ steps.version.outputs.value }}" --notes-file RELEASE_NOTES.md

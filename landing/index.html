@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Wikidot Editor Better Chrome 扩展安装页">
+  <title>Wikidot Editor Better · Chrome Extension</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --canvas: #10171f;
+      --panel: #17222d;
+      --panel-strong: #1d2b38;
+      --ink: #edf4f7;
+      --muted: #9eb1bd;
+      --line: #314453;
+      --cyan: #2dc8d8;
+      --yellow: #ffd166;
+      --green: #62d6a8;
+      --max: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--canvas);
+      color: var(--ink);
+      font: 16px/1.6 Inter, "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .site-nav {
+      border-bottom: 1px solid var(--line);
+      background: #121c25;
+    }
+
+    .site-nav .shell {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--cyan);
+    }
+
+    .hero {
+      border-bottom: 1px solid var(--line);
+      padding: 76px 0 68px;
+      background: #14212b;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--cyan);
+      font: 700 13px/1.2 ui-monospace, Consolas, monospace;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(36px, 5vw, 60px);
+      line-height: 1.08;
+    }
+
+    .hero-copy {
+      max-width: 690px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-logo {
+      width: min(100%, 270px);
+      justify-self: end;
+      filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .28));
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 9px 17px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--ink);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .button-primary {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: #092129;
+    }
+
+    .button-primary:hover {
+      border-color: #6ee7ee;
+      background: #6ee7ee;
+      color: #092129;
+    }
+
+    main {
+      padding: 64px 0 32px;
+    }
+
+    section {
+      margin-bottom: 72px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .section-head p {
+      max-width: 520px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .feature {
+      min-height: 190px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--panel);
+      padding: 22px;
+    }
+
+    .feature-index {
+      display: block;
+      color: var(--cyan);
+      font: 700 13px/1 ui-monospace, Consolas, monospace;
+    }
+
+    .feature h3 {
+      margin: 36px 0 8px;
+      font-size: 17px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+
+    .workflow-side {
+      padding: 26px;
+      background: var(--panel-strong);
+    }
+
+    .workflow-side p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .workflow-list {
+      display: grid;
+      padding: 8px 26px;
+    }
+
+    .workflow-step {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 16px;
+      align-items: center;
+      min-height: 92px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .workflow-step:last-child {
+      border-bottom: 0;
+    }
+
+    .step-num {
+      color: var(--yellow);
+      font: 700 15px/1 ui-monospace, Consolas, monospace;
+    }
+
+    .workflow-step h3 {
+      margin: 0 0 3px;
+      font-size: 16px;
+    }
+
+    .workflow-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .compat {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .compat-item {
+      border-left: 3px solid var(--cyan);
+      background: #13232d;
+      padding: 17px 19px;
+    }
+
+    .compat-item h3 {
+      margin: 0 0 4px;
+      font-size: 16px;
+    }
+
+    .compat-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .contribute {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 34px 0;
+    }
+
+    .contribute h2 {
+      margin-bottom: 8px;
+    }
+
+    .contribute p {
+      max-width: 620px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .contribute .actions {
+      margin: 0;
+      flex: none;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0 36px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer .shell {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    code {
+      padding: 1px 4px;
+      border: 1px solid #3b5968;
+      border-radius: 3px;
+      background: #102b35;
+      color: #83e4e8;
+      font: .9em ui-monospace, Consolas, monospace;
+    }
+
+    @media (max-width:760px) {
+      .shell {
+        width: min(var(--max), calc(100% - 28px));
+      }
+
+      .nav-links {
+        gap: 14px;
+      }
+
+      .hero {
+        padding: 52px 0;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .hero-logo {
+        width: 132px;
+        justify-self: start;
+        grid-row: 1;
+      }
+
+      .hero-copy {
+        font-size: 16px;
+      }
+
+      main {
+        padding-top: 48px;
+      }
+
+      section {
+        margin-bottom: 52px;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-head p {
+        margin-top: 10px;
+      }
+
+      .grid,
+      .compat {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-side {
+        padding-bottom: 18px;
+      }
+
+      .workflow-list {
+        padding: 6px 18px;
+      }
+
+      .contribute,
+      footer .shell {
+        display: block;
+      }
+
+      .contribute .actions {
+        margin-top: 20px;
+      }
+
+      footer p+p {
+        margin-top: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="site-nav" aria-label="主导航">
+    <div class="shell"><a class="brand" href="#top"><img src="./assets/logo.svg" alt="">Wikidot Editor Better</a>
+      <div class="nav-links"><a href="#features">功能</a><a href="#install">安装</a><a
+          href="https://github.com/SuperUseryjh/wikidot-editor-better-chrome-ext" target="_blank"
+          rel="noopener">GitHub</a></div>
+    </div>
+  </nav>
+  <header class="hero" id="top">
+    <div class="shell hero-grid">
+      <div>
+        <p class="eyebrow">[[ EDITOR: BETTER / MV3 ]]</p>
+        <h1>让 Wikidot 源码编辑，拥有原生扩展体验。</h1>
+        <p class="hero-copy">一个使用 Monaco Editor 接管 Wikidot 编辑区的 Chrome 扩展。保留工具栏、保存、预览和草稿流程，同时以 Manifest V3 的受限桥接安全处理跨站
+          include。</p>
+        <div class="actions">
+          <a class="button button-primary"
+            href="https://github.com/SuperUseryjh/wikidot-editor-better-chrome-ext/releases" target="_blank"
+            rel="noopener">下载最新 ZIP</a>
+          <a class="button" href="https://github.com/SuperUseryjh/wikidot-editor-better-chrome-ext" target="_blank"
+            rel="noopener">查看源码</a>
+          <a class="button" href="https://fuckidot-editor.yaoonion.fun" target="_blank" rel="noopener">查看 Tampermonkey 用户脚本版本</a>
+        </div>
+      </div>
+      <img class="hero-logo" src="./assets/logo.svg" alt="Wikidot Editor Better 标志">
+    </div>
+  </header>
+  <main class="shell">
+    <section id="features">
+      <div class="section-head">
+        <h2>为 Wikidot 编辑页而做</h2>
+        <p>不改变 Wikidot 原有编辑流程，而是在页面主世界中为源码编辑补齐专业工具和扩展级能力。</p>
+      </div>
+      <div class="grid">
+        <article class="feature"><span class="feature-index">01 / EDIT</span>
+          <h3>Monaco 编辑器</h3>
+          <p>代码折叠、括号配对、行列状态、主题适配与稳定的手动布局。</p>
+        </article>
+        <article class="feature"><span class="feature-index">02 / PARSE</span>
+          <h3>Wikidot 语法</h3>
+          <p>识别 <code>[[module]]</code>、标题、表格、引用和链接；CSS、HTML、脚本与样式块支持嵌入高亮。</p>
+        </article>
+        <article class="feature"><span class="feature-index">03 / KEEP</span>
+          <h3>原流程兼容</h3>
+          <p>通过 textarea 属性代理维持保存、预览、草稿、校验和原工具栏按钮可用。</p>
+        </article>
+        <article class="feature"><span class="feature-index">04 / BRIDGE</span>
+          <h3>安全桥接</h3>
+          <p>由 Service Worker 处理经过白名单校验的跨站 include 请求和 Cookie 读取。</p>
+        </article>
+        <article class="feature"><span class="feature-index">05 / LOAD</span>
+          <h3>多源加载</h3>
+          <p>并行探测多个 CDN；AMD 不可用时自动使用 ESM 路径，并为失败场景保留原生编辑框。</p>
+        </article>
+        <article class="feature"><span class="feature-index">06 / MV3</span>
+          <h3>独立扩展</h3>
+          <p>不依赖 Tampermonkey、GM API 或油猴脚本，可单独安装、构建和发布。</p>
+        </article>
+      </div>
+    </section>
+    <section id="install">
+      <div class="section-head">
+        <h2>四步开始</h2>
+        <p>首次打开编辑页时会下载 Monaco 编辑器资源。加载失败时原生编辑框仍保持可用。</p>
+      </div>
+      <div class="workflow">
+        <div class="workflow-side">
+          <p class="eyebrow">SETUP</p>
+          <p>从 Release 下载扩展包，解压并在 Chrome 开发者模式加载即可。不需要用户脚本管理器。</p>
+        </div>
+        <div class="workflow-list">
+          <div class="workflow-step"><span class="step-num">01</span>
+            <div>
+              <h3>下载扩展包</h3>
+              <p>从 GitHub Releases 下载 <code>wikidot-editor-better-chrome.zip</code>，并解压到本地目录。</p>
+            </div>
+          </div>
+          <div class="workflow-step"><span class="step-num">02</span>
+            <div>
+              <h3>开启开发者模式</h3>
+              <p>打开 <code>chrome://extensions</code>，在右上角开启“开发者模式”。</p>
+            </div>
+          </div>
+          <div class="workflow-step"><span class="step-num">03</span>
+            <div>
+              <h3>加载已解压扩展</h3>
+              <p>点击“加载已解压的扩展程序”，选择刚才解压后的目录。</p>
+            </div>
+          </div>
+          <div class="workflow-step"><span class="step-num">04</span>
+            <div>
+              <h3>编辑 Wikidot 页面</h3>
+              <p>进入任意 Wikidot 页面并点击编辑，Monaco 会在编辑区出现时自动接管。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="section-head">
+        <h2>权限与稳定性</h2>
+        <p>扩展只请求实现功能所需的最小权限，并让跨站请求保持在明确的安全边界内。</p>
+      </div>
+      <div class="compat">
+        <article class="compat-item">
+          <h3>有限主机范围</h3>
+          <p>只在 Wikidot 域名下运行，跨站请求仅允许 HTTPS 的 Wikidot 子域名和受限页面路径。</p>
+        </article>
+        <article class="compat-item">
+          <h3>Cookie 仅用于 include</h3>
+          <p>仅读取 Wikidot 的 <code>wikidot_token7</code>，以完成经过校验的 ViewSourceModule 请求。</p>
+        </article>
+        <article class="compat-item">
+          <h3>加载失败可回退</h3>
+          <p>Monaco 无法初始化时，原生 textarea 会继续可用，并提供自动和手动重试。</p>
+        </article>
+        <article class="compat-item">
+          <h3>保留页面加载器</h3>
+          <p>检测到页面已有 AMD 加载器时不覆盖全局变量，避免影响站点或其他扩展。</p>
+        </article>
+      </div>
+    </section>
+    <section class="contribute">
+      <div>
+        <h2>一起把它做得更顺手</h2>
+        <p>欢迎 Bug 报告、功能建议和代码贡献。项目采用 GNU GPL v3.0 开源许可。</p>
+      </div>
+      <div class="actions"><a class="button"
+          href="https://github.com/SuperUseryjh/wikidot-editor-better-chrome-ext/issues" target="_blank"
+          rel="noopener">报告问题</a><a class="button"
+          href="https://github.com/SuperUseryjh/wikidot-editor-better-chrome-ext/pulls" target="_blank"
+          rel="noopener">提交改动</a></div>
+    </section>
+  </main>
+  <footer>
+    <div class="shell">
+      <p>Wikidot Editor Better / FuckiDot Editor</p>
+      <p>Chrome Manifest V3 Extension</p>
+    </div>
+  </footer>
+</body>
+
+</html>
