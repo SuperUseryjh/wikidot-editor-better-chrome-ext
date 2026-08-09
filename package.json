@@ -1,6 +1,6 @@
 {
   "name": "wikidot-editor-better-chrome-ext",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "packageManager": "bun@1.3.14",
   "description": "将 Wikidot 编辑器的 textarea 替换为 Monaco Editor 的 Chrome 扩展",

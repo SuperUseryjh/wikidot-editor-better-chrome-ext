@@ -112,6 +112,15 @@ landing/                   可独立部署的扩展安装落地页
 
 Tampermonkey 版本是独立项目，拥有自己的版本、自动更新、构建、Release 和落地页；本扩展不依赖其源码或产物。
 
+本扩展由 Tampermonkey 脚本 v1.0.2 分叉而来。
+
+Tampermonkey 版本号继续保持 1.x.x 格式。
+
+### 友情链接
+
+- [Tampermonkey 版本落地页](https://fuckidot-editor.yaoonion.fun)
+- [Tampermonkey 版本仓库](https://github.com/SuperUseryjh/wikidot-editor-better)
+
 ## 许可证
 
 本项目使用 [GNU GPL v3.0](LICENSE) 许可证。
