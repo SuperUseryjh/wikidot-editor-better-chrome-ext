@@ -9,7 +9,7 @@ export const MONACO_CONTAINER_ID = 'wikidot-monaco-container';
 export const MONACO_STATUS_ID = 'wikidot-monaco-status';
 export const MONACO_ERROR_ID = 'wikidot-monaco-error';
 export const EDITOR_STYLE_ID = 'wikidot-monaco-style';
-export const EDITOR_CONFIG_KEY = 'wikidotEditorBetterConfig';
+export const EDITOR_CONFIG_KEY = 'wikidot-editor-better-config';
 export const MONACO_RETRY_DELAYS = [1000, 3000, 8000] as const;
 
 export const FONT_SIZE_KEY = 'wikidotMonacoFontSize';
@@ -18,3 +18,14 @@ export const MIN_FONT_SIZE = 10;
 export const MAX_FONT_SIZE = 30;
 
 export const WIKIDOT_LANGUAGE_ID = 'wikidot';
+
+/**
+ * 主世界状态栏设置按钮 → content script 打开设置面板的事件名。
+ */
+export const OPEN_SETTINGS_EVENT = 'wikidot-editor-better-open-settings';
+
+/**
+ * 主世界 include 校验 → content script 发起跨域请求的事件名。
+ */
+export const INCLUDE_REQUEST_EVENT = 'wikidot-editor-better-include-request';
+export const INCLUDE_RESPONSE_EVENT = 'wikidot-editor-better-include-response';
